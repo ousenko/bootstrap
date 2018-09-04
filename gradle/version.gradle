@@ -1,0 +1,53 @@
+/**
+* This gradle ext script sets two variables: gitBasedVersionCode and gitBasedVersionName
+* These variables are derived from Git history, assuming you use git tags to mark your (micro-)releases
+*
+*
+**/
+ext {
+    //example: 1.0-2-g234112312
+    def longVersionName = "git -C ${rootDir} describe --tags --long".execute().text.trim()
+
+    if (longVersionName == null || "" == longVersionName) {
+        gitBasedVersionCode = 1
+        gitBasedVersionName = "0.0.1"
+    } else {
+
+        logger.debug("version (debug): $longVersionName")
+
+        def (fullVersionTag, versionPatch, gitSha) = longVersionName.tokenize('-')
+
+        def (versionMajor, versionMinor) = fullVersionTag.tokenize('.')
+
+        def maj = versionMajor == null ? 0 : versionMajor.toInteger()
+        def min = versionMinor == null ? 0 : versionMinor.toInteger()
+        def patch = versionPatch == null ? 0 : versionPatch.toInteger()
+
+
+        def BASE = 256
+
+        if (patch >= BASE || min >= BASE || maj >= BASE) {
+            throw new IllegalStateException("Tag digit should be in range: [0, ${BASE - 1} ]")
+        }
+
+        gitBasedVersionCode = (
+                0/*initial offset*/
+                        + maj * BASE * BASE
+                        + min * BASE
+                        + patch
+        )
+
+        //last sanity check, we want to avoid pushing version number that is TOO LARGE
+        if (gitBasedVersionCode > Integer.MAX_VALUE / 2) {
+            throw new IllegalStateException("Version code is close to Integer.MAX_VALUE . Change versioning strategy, or version code space will be exhausted")
+        }
+
+        logger.info("versionCode: $gitBasedVersionCode")
+
+        gitBasedVersionName = "$maj.$min.$patch"
+
+
+        logger.info("versionName: $gitBasedVersionName")
+    }
+
+}
