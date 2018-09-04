@@ -14,7 +14,9 @@ import android.support.annotation.StringRes
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
 
-
+/**
+ * Enumeration of application's notification channels
+ * */
 @TargetApi(26)
 enum class AppNotificationChannel(val channelId: String,
                                   @StringRes val channelNameResId: Int,
@@ -30,6 +32,9 @@ enum class AppNotificationChannel(val channelId: String,
 }
 
 
+/**
+ * An applications's facade for issuing notifications
+ * */
 class NotificationsService(private val context: Context,
                            private val notificationManager: NotificationManagerCompat
 ) {

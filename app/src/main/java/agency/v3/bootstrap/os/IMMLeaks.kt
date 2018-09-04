@@ -18,6 +18,10 @@ import java.lang.reflect.Field
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 
+/**
+ * A dirty hack for removing annoying memory leaks related to InputMethodManager that seemingly
+ * will never be fixed by platform developers
+ * */
 object IMMLeaks {
 
     internal class ReferenceCleaner(private val inputMethodManager: InputMethodManager, private val mHField: Field, private val mServedViewField: Field,
