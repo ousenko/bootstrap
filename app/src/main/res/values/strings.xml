@@ -3,4 +3,8 @@
 
     <string name="notificaiton.channel_name">Some Channel</string>
     <string name="notificaiton.channel_description">Notification Channel Description</string>
+    <string name="try_again">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
 </resources>
