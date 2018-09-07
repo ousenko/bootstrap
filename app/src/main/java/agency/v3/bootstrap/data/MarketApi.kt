@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface MarketApi {
 
-    @GET("/ref-data/symbols")
+    @GET("/1.0/ref-data/symbols")
     fun symbols(): Observable<List<TradingSymbol>>
 }
 

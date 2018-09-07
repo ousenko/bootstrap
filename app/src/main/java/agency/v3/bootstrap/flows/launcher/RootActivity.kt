@@ -5,12 +5,14 @@ import agency.v3.bootstrap.R
 import agency.v3.bootstrap.di.component.ActivityComponent
 import agency.v3.bootstrap.di.component.ActivityComponentOwner
 import agency.v3.bootstrap.di.module.ActivityModule
+import agency.v3.bootstrap.flows.symbols.SymbolsController
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.ViewGroup
 import butterknife.ButterKnife
 import com.bluelinelabs.conductor.Conductor
 import com.bluelinelabs.conductor.Router
+import com.bluelinelabs.conductor.RouterTransaction
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -42,7 +44,10 @@ class RootActivity : AppCompatActivity(), ActivityComponentOwner, RootView /*Roo
         activityComponent = BootstrapApp.component.plus(ActivityModule(this, router))
         activityComponent.plus(RootModule()).inject(this)
 
-//        handleNotification(intent)
+        if (!router.hasRootController()) {
+            router.setRoot(RouterTransaction.with(SymbolsController()))
+        }
+
     }
 
 

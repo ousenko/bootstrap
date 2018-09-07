@@ -11,42 +11,28 @@ import io.reactivex.disposables.Disposable
  * - signal: accumulates result unless there's a consumer available, flushes value to consumer, clears the value so that subsequent subscribers will not receive it
  * - variable: keeps the value and notifies consumer about value changes; after notification, value is not cleared so subsequent subscribers will receive it at least once
  */
-class Variable<T> private constructor(
-        @Volatile private var value: T?,
-        private val shouldClearValueAfterConsumption: Boolean
-) {
+class Variable<T> private constructor(value: T?, private val shouldClearValueAfterConsumption: Boolean) {
+
+
+    @Volatile
+    var value: T? = value
+        @Synchronized get() {
+            return field
+        }
+        @Synchronized set(value) {
+
+            val isDistinct = (field != value)
+            field = value
+
+            if (isDistinct) {
+                maybeConsume(field)
+            }
+        }
 
 
     private var consumer: ((T) -> Unit)? = null
 
-
-    /**
-     * Get value of this [Variable]
-     * @return value of variable or null, if no value specified
-     */
-    fun getValue(): T? {
-        synchronized(this) {
-            return value
-        }
-    }
-
-
-    /**
-     * Set value of this [Variable] and notify registered consumers
-     * @param value a new value for this variable
-     */
-    fun setValue(value: T) {
-        synchronized(this) {
-            val isDistinct = setValueInternal(value)
-            if (isDistinct) {
-                maybeConsume()
-            }
-        }
-    }
-
-
-    private fun maybeConsume() {
-        val captureVal = value
+    private fun maybeConsume(captureVal: T?) {
         if (captureVal != null) {
             var consumeCount = 0
             consumer?.let {
@@ -57,15 +43,6 @@ class Variable<T> private constructor(
         }
     }
 
-
-    /**
-     * @return whether distinct value was set
-     */
-    private fun setValueInternal(value: T): Boolean {
-        val isDistinct = this.value != value
-        this.value = value
-        return isDistinct
-    }
 
     private fun maybeClearValue(wasConsumed: Boolean) {
         if (wasConsumed && shouldClearValueAfterConsumption) {
@@ -88,7 +65,7 @@ class Variable<T> private constructor(
                 }
             } else {
                 this.consumer = observer
-                maybeConsume()
+                maybeConsume(value)
             }
         }
 

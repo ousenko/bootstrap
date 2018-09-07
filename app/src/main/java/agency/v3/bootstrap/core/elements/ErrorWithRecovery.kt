@@ -9,8 +9,8 @@ package agency.v3.bootstrap.core.elements
  *
  */
 class ErrorWithRecovery(
-        val reason: String,
         val reasonThrowable: Throwable,
-        val recovery: (() -> Unit)?,
-        val cancellation: (() -> Unit)?
+        val reason: String = reasonThrowable.message ?: "",
+        val recovery: (() -> Unit)? = null,
+        val cancellation: (() -> Unit)? = null
 )

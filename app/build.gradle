@@ -59,7 +59,7 @@ android {
             signingConfig signingConfigs.production
             dimension "app"
 
-            buildConfigField "String", "BASE_URL", '"https://api.iextrading.com/1.0/"' //usually different for production
+            buildConfigField "String", "BASE_URL", '"https://api.iextrading.com/"' //usually different for production
         }
 
         staging {
@@ -67,7 +67,7 @@ android {
             signingConfig signingConfigs.staging
             dimension "app"
 
-            buildConfigField "String", "BASE_URL", '"https://api.iextrading.com/1.0/"'
+            buildConfigField "String", "BASE_URL", '"https://api.iextrading.com/"'
 
         }
     }

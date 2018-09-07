@@ -8,11 +8,15 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import javax.inject.Inject
 
 /**
  * Extension to Base controller that adds useful functionality to manipulate keyboard, dialogs etc
  * */
 abstract class RichController: BaseController {
+
+    @Inject
+    lateinit var context: Context
 
     protected constructor() : super()
     protected constructor(bundle: Bundle) : super(bundle)
