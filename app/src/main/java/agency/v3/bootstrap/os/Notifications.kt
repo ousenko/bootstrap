@@ -2,7 +2,7 @@ package agency.v3.bootstrap.os
 
 import agency.v3.bootstrap.BootstrapApp
 import agency.v3.bootstrap.R
-import agency.v3.bootstrap.RootActivity
+import agency.v3.bootstrap.flows.launcher.RootActivity
 import android.annotation.TargetApi
 import android.app.Notification
 import android.app.NotificationManager
